@@ -1,0 +1,29 @@
+apiVersion: keycloak.platformref.upbound.io/v1alpha1
+kind: User
+metadata:
+  name: backstage-admin-user
+  namespace: default
+spec:
+  compositeDeletePolicy: Foreground
+  parameters:
+    id: platform-ref-aws-cnoe
+    username: backstage-admin
+    firstname: backstage
+    lastname: admin
+    email: backstage-admin@upboundrocks.cloud
+    group: backstage-admin
+    initialPassword:
+      - valueSecretRef:
+          key: password
+          name: backstage-admin-user
+          namespace: default
+        temporary: true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backstage-admin-user
+  namespace: default
+type: Opaque
+stringData:
+  password: my-secret-password

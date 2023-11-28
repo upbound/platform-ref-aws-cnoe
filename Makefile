@@ -20,7 +20,7 @@ UPTEST_VERSION = v0.6.1
 # ====================================================================================
 # Setup XPKG
 XPKG_DIR = $(shell pwd)
-XPKG_IGNORE = .github/workflows/*.yaml,.github/workflows/*.yml,examples/*.yaml,.work/uptest-datasource.yaml,test/provider/*.yaml,platform-ref-aws-cnoe/*.yaml
+XPKG_IGNORE = .github/workflows/*.yaml,.github/workflows/*.yml,examples/*.yaml,examples/render/*.yaml,.work/uptest-datasource.yaml,test/provider/*.yaml,platform-ref-aws-cnoe/*.yaml
 XPKG_REG_ORGS ?= xpkg.upbound.io/upbound
 # NOTE(hasheddan): skip promoting on xpkg.upbound.io as channel tags are
 # inferred.
@@ -66,7 +66,7 @@ build.init: $(UP)
 # - UPTEST_DATASOURCE_PATH (optional), see https://github.com/upbound/uptest#injecting-dynamic-values-and-datasource
 uptest: $(UPTEST) $(KUBECTL) $(KUTTL)
 	@$(INFO) running automated tests
-	@KUBECTL=$(KUBECTL) KUTTL=$(KUTTL) $(UPTEST) e2e examples/cnoe.yaml --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=test/setup.sh --default-timeout=2400 || $(FAIL)
+	@KUBECTL=$(KUBECTL) KUTTL=$(KUTTL) $(UPTEST) e2e examples/cnoe.yaml,examples/argocd-admin-user.yaml,examples/backstage-admin-user.yaml --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=test/setup.sh --default-timeout=2400 || $(FAIL)
 	@$(OK) running automated tests
 
 # This target requires the following environment variables to be set:

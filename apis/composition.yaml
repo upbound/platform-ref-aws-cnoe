@@ -82,15 +82,14 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.iam.userArn
           toFieldPath: spec.parameters.iam.userArn
-        # ToDo(haarchri): enable when https://github.com/upbound/configuration-aws-eks/pull/5 merged
-        # - type: FromCompositeFieldPath:
-        #   fromFieldPath: status.karpenter.instanceProfileRoleArn
-        #   toFieldPath: spec.parameters.iam.autoscalerArn
-        #   policy:
-        #     fromFieldPath: Optional
+        - type: FromCompositeFieldPath
+          fromFieldPath: status.cnoe.karpenter.instanceProfileRoleArn
+          toFieldPath: spec.parameters.iam.autoscalerArn
+          policy:
+            fromFieldPath: Optional
         - type: ToCompositeFieldPath
           fromFieldPath: status.eks.clusterName
-          toFieldPath: status.eks.clusterName
+          toFieldPath: status.cnoe.eks.clusterName
           policy:
             fromFieldPath: Optional
 
@@ -126,14 +125,39 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.gitops
           toFieldPath: spec.parameters.source
+        - type: CombineFromComposite
+          policy:
+            fromFieldPath: Required
+          combine:
+            variables:
+              - fromFieldPath: spec.parameters.id
+              - fromFieldPath: status.cnoe.route53Zone.name
+              - fromFieldPath: status.cnoe.keycloak.argoCD.clientSecret
+            strategy: string
+            string:
+              fmt: |
+                name: Keycloak
+                issuer: https://keycloak-%s.%s/realms/master
+                clientID: argocd
+                clientSecret: %s
+                requestedScopes: ['openid', 'profile', 'email', 'groups']
+          toFieldPath: spec.parameters.oidcConfig
+        - type: CombineFromComposite
+          policy:
+            fromFieldPath: Required
+          combine:
+            variables:
+              - fromFieldPath: spec.parameters.id
+              - fromFieldPath: status.cnoe.route53Zone.name
+            strategy: string
+            string:
+              fmt: argocd-%s.%s
+          toFieldPath: spec.parameters.ingressUrl
 
     - name: XKarpenter
       base:
         apiVersion: aws.platform.upbound.io/v1alpha1
         kind: XKarpenter
-        spec:
-          parameters:
-            clusterName: platform-ref-aws-cnoe-pctqp-b2c5t # ToDo(haarchri): remove when https://github.com/upbound/configuration-aws-eks/pull/5 merged
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.deletionPolicy
@@ -144,12 +168,11 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.region
           toFieldPath: spec.parameters.region
-        # ToDo(haarchri): enable when https://github.com/upbound/configuration-aws-eks/pull/5 merged
-        # - type: FromCompositeFieldPath
-        #   fromFieldPath: status.eks.clusterName
-        #   toFieldPath: spec.parameters.clusterName
-        #   policy:
-        #     fromFieldPath: Required
+        - type: FromCompositeFieldPath
+          fromFieldPath: status.cnoe.eks.clusterName
+          toFieldPath: spec.parameters.clusterName
+          policy:
+            fromFieldPath: Required
         - type: ToCompositeFieldPath
           fromFieldPath: status.karpenter.IRSARoleArn
           toFieldPath: status.cnoe.karpenter.IRSARoleArn
@@ -302,7 +325,7 @@ spec:
           fromFieldPath: spec.parameters.deletionPolicy
           toFieldPath: spec.deletionPolicy
         - type: FromCompositeFieldPath
-          fromFieldPath: status.route53Zone.name
+          fromFieldPath: status.cnoe.route53Zone.name
           toFieldPath: spec.forProvider.values.domainFilters[0]
           policy:
             fromFieldPath: Required
@@ -588,7 +611,6 @@ spec:
               name: aws-load-balancer-controller
               repository: https://aws.github.io/eks-charts
             values:
-              clusterName: platform-ref-aws-cnoe-pctqp-b2c5t # ToDo(haarchri): remove when https://github.com/upbound/configuration-aws-eks/pull/5 merged
               serviceAccount:
                 name: aws-load-balancer-controller
       patches:
@@ -603,12 +625,11 @@ spec:
           toFieldPath: spec.forProvider.values.serviceAccount.annotations[eks.amazonaws.com/role-arn]
           policy:
             fromFieldPath: Required
-        # ToDo(haarchri): enable when https://github.com/upbound/configuration-aws-eks/pull/5 merged
-        # - type: FromCompositeFieldPath
-        #   fromFieldPath: status.eks.clusterName
-        #   toFieldPath: spec.forProvider.values.clusterName
-        #   policy:
-        #     fromFieldPath: Required
+        - type: FromCompositeFieldPath
+          fromFieldPath: status.cnoe.eks.clusterName
+          toFieldPath: spec.forProvider.values.clusterName
+          policy:
+            fromFieldPath: Required
 
     - name: CertManagerChart
       base:
@@ -729,7 +750,7 @@ spec:
             chart:
               name: crossplane
               repository: oci://xpkg.upbound.io/crossplane/crossplane
-              version: 1.14.1
+              version: v1.14.1
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.id
@@ -1215,8 +1236,13 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: metadata.uid
           toFieldPath: spec.forProvider.manifest.stringData.clientSecret
+        - type: ToCompositeFieldPath
+          fromFieldPath: metadata.uid
+          toFieldPath: status.cnoe.keycloak.argoCD.clientSecret
+          policy:
+            fromFieldPath: Optional
 
-    - name: keycloakOpenIdClient # ToDo(haarchri): change to keycloakArgoCDOpenIdClient
+    - name: keycloakArgoCDOpenIdClient
       base:
         apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
         kind: Client
@@ -1308,7 +1334,7 @@ spec:
               fmt: https://argocd-%s.%s
           toFieldPath: spec.forProvider.adminUrl
 
-    - name: keycloakOpenIdClientDefaultScopes # ToDo(haarchri): change-me keycloakArgoCDOpenIdClientDefaultScopes
+    - name: keycloakArgoCDOpenIdClientDefaultScopes
       base:
         apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
         kind: ClientDefaultScopes

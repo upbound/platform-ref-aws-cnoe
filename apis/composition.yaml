@@ -749,8 +749,8 @@ spec:
             namespace: crossplane-system
             chart:
               name: crossplane
-              repository: oci://xpkg.upbound.io/crossplane/crossplane
-              version: v1.14.1
+              repository: https://charts.crossplane.io/stable
+              version: 1.14.3
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.id

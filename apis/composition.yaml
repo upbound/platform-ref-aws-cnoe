@@ -19,7 +19,7 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.region
           toFieldPath: spec.parameters.region
-        - type: FromCompositeFieldPath 
+        - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.deletionPolicy
           toFieldPath: spec.parameters.deletionPolicy
         - type: FromCompositeFieldPath
@@ -620,7 +620,7 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.deletionPolicy
           toFieldPath: spec.deletionPolicy
-        - type: FromCompositeFieldPath 
+        - type: FromCompositeFieldPath
           fromFieldPath: status.cnoe.AWSLoadbalancerController.IRSARoleArn
           toFieldPath: spec.forProvider.values.serviceAccount.annotations[eks.amazonaws.com/role-arn]
           policy:
@@ -799,17 +799,17 @@ spec:
               spec:
                 ingressClassName: nginx
                 rules:
-                - http:
-                    paths:
-                    - path: /
-                      pathType: Prefix
-                      backend:
-                        service:
-                          name: argocd-server
-                          port:
-                            name: https
+                  - http:
+                      paths:
+                        - path: /
+                          pathType: Prefix
+                          backend:
+                            service:
+                              name: argocd-server
+                              port:
+                                name: https
                 tls:
-                - secretName: argocd-server-tls
+                  - secretName: argocd-server-tls
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.id
@@ -864,13 +864,13 @@ spec:
               ingress:
                 enabled: true
                 className: nginx
-                annotations:  
-                  cert-manager.io/cluster-issuer: letsencrypt-prod 
+                annotations:
+                  cert-manager.io/cluster-issuer: letsencrypt-prod
                 tls:
                   enabled: true
                   secretName: backstage-tls
-              backstage: 
-                image: 
+              backstage:
+                image:
                   registry: public.ecr.aws
                   repository: cnoe-io/backstage
                   tag: v0.0.2
@@ -898,7 +898,7 @@ spec:
                   #   github:
                   #     - host: github.com
                   #       token: ${GITHUB_TOKEN}
-                  proxy: 
+                  proxy:
                   techdocs:
                     builder: 'local'
                     generator:
@@ -926,12 +926,12 @@ spec:
                       - type: url
                         target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme/org.yaml
                         rules:
-                        - allow: [Group, User]
-                      # ToDo(haarchri): enable github intergration
-                      # - type: url
-                      #   target: repository # patched
-                      #   rules:
-                      #   - allow: [Component, API, Resource, Template, System]
+                          - allow: [Group, User]
+                          # ToDo(haarchri): github intergration
+                          # - type: url
+                          #   target: repository
+                          #   rules:
+                          #     - allow: [Component, API, Resource, Template, System]
                   kubernetes:
                     serviceLocatorMethod:
                       type: multiTenant
@@ -1074,12 +1074,6 @@ spec:
             - type: string
               string:
                 fmt: "%s-keycloak"
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.parameters.id
-          toFieldPath: spec.providerConfigRef.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.parameters.deletionPolicy
-          toFieldPath: spec.deletionPolicy
       readinessChecks:
         - type: None
 
@@ -1236,8 +1230,11 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: metadata.uid
           toFieldPath: spec.forProvider.manifest.stringData.clientSecret
-        - type: ToCompositeFieldPath
+        - type: FromCompositeFieldPath
           fromFieldPath: metadata.uid
+          toFieldPath: metadata.labels[keycloak.crossplane.io/client-secret]
+        - type: ToCompositeFieldPath
+          fromFieldPath: metadata.labels[keycloak.crossplane.io/client-secret]
           toFieldPath: status.cnoe.keycloak.argoCD.clientSecret
           policy:
             fromFieldPath: Optional
@@ -1254,7 +1251,7 @@ spec:
             name: argocd
             enabled: true
             accessType: CONFIDENTIAL
-            clientSecretSecretRef: 
+            clientSecretSecretRef:
               namespace: upbound-system
               key: clientSecret
             standardFlowEnabled: true
@@ -1399,7 +1396,7 @@ spec:
             name: backstage
             enabled: true
             accessType: CONFIDENTIAL
-            clientSecretSecretRef: 
+            clientSecretSecretRef:
               namespace: upbound-system
               key: clientSecret
             standardFlowEnabled: true

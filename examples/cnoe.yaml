@@ -9,11 +9,19 @@ spec:
     id: platform-ref-aws-cnoe
     region: us-west-2
     version: "1.27"
-    # replace with your custom zone id:
+    # Important: Please read the README regarding the need for a route53zoneId.
+    # The route53zoneId is crucial for making the CNOE platform accessible via a web browser.
+    # Replace the placeholder below with your Route53 Zone ID.
     # route53zoneId: Z0000000000000000000
     route53zoneId: ${data.aws_route53_zone_publicZoneId}
     iam:
-      # replace with your custom arn like:
+      # Important: Please specify an iamRoleArn to access the AWS EKS Cluster deployed as part of CNOE.
+      # Without specifying a valid roleArn, you will not be able to log in to the EKS cluster.
+      # If you are using AWS SSO Roles, ensure to remove 'aws-reserved/sso.amazonaws.com/' from the ARN.
+      # For example, convert this:
+      #   arn:aws:iam::123456789:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
+      # To this:
+      #   arn:aws:iam::123456789:role/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
       # roleArn: arn:aws:iam::123456789:role/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
       roleArn: ${data.aws_eks_iam_default_admin}
     nodes:

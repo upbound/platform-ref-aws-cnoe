@@ -57,12 +57,12 @@ spec:
                                 description: Namespace of the secret.
                                 type: string
                             required:
-                            - key
-                            - name
-                            - namespace
+                              - key
+                              - name
+                              - namespace
                             type: object
                         required:
-                        - valueSecretRef
+                          - valueSecretRef
                         type: object
                       type: array
                     email:

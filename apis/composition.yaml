@@ -1092,9 +1092,6 @@ spec:
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.id
-          toFieldPath: spec.providerConfigRef.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.parameters.id
           toFieldPath: spec.forProvider.manifest.metadata.name
           transforms:
             - type: string
@@ -1220,9 +1217,6 @@ spec:
                 namespace: upbound-system
               type: Opaque
       patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.parameters.id
-          toFieldPath: spec.providerConfigRef.name
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.id
           toFieldPath: spec.forProvider.manifest.metadata.name
@@ -1376,9 +1370,6 @@ spec:
                 namespace: upbound-system
               type: Opaque
       patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.parameters.id
-          toFieldPath: spec.providerConfigRef.name
         - type: FromCompositeFieldPath
           fromFieldPath: spec.parameters.id
           toFieldPath: spec.forProvider.manifest.metadata.name

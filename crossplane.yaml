@@ -39,10 +39,10 @@ spec:
       version: "v0.2.0"
     - provider: xpkg.upbound.io/upbound/provider-aws-route53
       # renovate: datasource=github-releases depName=upbound/provider-aws
-      version: "v0.47.1"
+      version: "v0.47.4"
     - provider: xpkg.upbound.io/upbound/provider-family-aws
       # renovate: datasource=github-releases depName=upbound/provider-aws
-      version: "v0.47.1"
+      version: "v0.47.4"
     - provider: xpkg.upbound.io/crossplane-contrib/provider-keycloak
       # renovate: datasource=github-releases depName=crossplane-contrib/provider-keycloak
       version: "v0.6.0"

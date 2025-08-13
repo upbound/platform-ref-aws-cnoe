@@ -45,4 +45,4 @@ spec:
       version: "v0.47.1"
     - provider: xpkg.upbound.io/crossplane-contrib/provider-keycloak
       # renovate: datasource=github-releases depName=crossplane-contrib/provider-keycloak
-      version: "v0.6.0"
+      version: "v0.23.0"

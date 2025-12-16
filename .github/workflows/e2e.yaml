@@ -14,6 +14,8 @@ env:
   UP_ORG: ${{ secrets.UP_E2E_ORG || secrets.UP_ORG }}
   UP_GROUP: ${{ secrets.UP_E2E_GROUP || secrets.UP_GROUP || 'default' }}
   UP_ROBOT_ID: ${{ secrets.UP_E2E_ROBOT_ID || secrets.UP_ROBOT_ID }}
+  ROUTE53_ZONE_ID: ${{ secrets.E2E_ROUTE53_ZONE_ID }}
+  IAM_ROLE_ARN: ${{ secrets.E2E_IAM_ROLE_ARN }}
 
 jobs:
   e2e:

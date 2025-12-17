@@ -14,8 +14,6 @@ env:
   UP_ORG: ${{ secrets.UP_E2E_ORG || secrets.UP_ORG }}
   UP_GROUP: ${{ secrets.UP_E2E_GROUP || secrets.UP_GROUP || 'default' }}
   UP_ROBOT_ID: ${{ secrets.UP_E2E_ROBOT_ID || secrets.UP_ROBOT_ID }}
-  ROUTE53_ZONE_ID: ${{ secrets.E2E_ROUTE53_ZONE_ID }}
-  IAM_ROLE_ARN: ${{ secrets.E2E_IAM_ROLE_ARN }}
 
 jobs:
   e2e:
@@ -27,7 +25,14 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-
+          
+      - name: Export project-specific environment variables
+        if: secrets.E2E_EXTRA != ''
+        env:
+          E2E_EXTRA: ${{ secrets.E2E_EXTRA }}
+        run: |
+          echo "$E2E_EXTRA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> $GITHUB_ENV
+          
       - name: Install and login with up
         if: env.UP_API_TOKEN != '' && env.UP_ORG != ''
         uses: upbound/action-up@53fe6395637d884c80d2bbc8c2d75d0ece776ced # v1

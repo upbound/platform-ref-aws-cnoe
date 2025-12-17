@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       E2E_EXTRA: ${{ secrets.E2E_EXTRA }}
+      TEST_UNSET: ${{ secrets.DOESNTEXIST }}
     steps:
       - name: Checkout
         id: checkout

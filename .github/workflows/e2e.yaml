@@ -29,12 +29,12 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           
       - name: Export project-specific environment variables
-        if: ${{ secrets.E2E_EXTRA != '' }}
+        if: env.E2E_EXTRA != ''
         run: |
           echo "$E2E_EXTRA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> $GITHUB_ENV
 
       - name: Verify AWS_REGION_NAME is set
-        if: ${{ secrets.E2E_EXTRA != '' }}
+        if: env.E2E_EXTRA != ''
         run: |
           if [ -n "$AWS_REGION_NAME" ]; then
             echo "✓ AWS_REGION_NAME is set: $AWS_REGION_NAME"

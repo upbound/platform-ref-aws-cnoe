@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       E2E_EXTRA: ${{ secrets.E2E_EXTRA }}
-      TEST_UNSET: ${{ secrets.DOESNTEXIST }}
     steps:
       - name: Checkout
         id: checkout
@@ -33,7 +32,17 @@ jobs:
         if: env.E2E_EXTRA != ''
         run: |
           echo "$E2E_EXTRA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> $GITHUB_ENV
-          
+
+      - name: Verify AWS_REGION_NAME is set
+        if: env.E2E_EXTRA != ''
+        run: |
+          if [ -n "$AWS_REGION_NAME" ]; then
+            echo "✓ AWS_REGION_NAME is set: $AWS_REGION_NAME"
+          else
+            echo "✗ AWS_REGION_NAME is NOT set"
+            exit 1
+          fi
+
       - name: Install and login with up
         if: env.UP_API_TOKEN != '' && env.UP_ORG != ''
         uses: upbound/action-up@53fe6395637d884c80d2bbc8c2d75d0ece776ced # v1

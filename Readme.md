@@ -53,7 +53,7 @@ kind: Configuration
 metadata:
   name: platform-ref-aws-cnoe
 spec:
-  package: xpkg.upbound.io/upbound/platform-ref-aws-cnoe:v0.2.0
+  package: xpkg.upbound.io/upbound/platform-ref-aws-cnoe:v1.0.0
 ```
 
 **Step 2: Apply the Configuration**

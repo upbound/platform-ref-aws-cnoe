@@ -1,0 +1,63 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xusers.keycloak.platformref.upbound.io
+spec:
+  group: keycloak.platformref.upbound.io
+  names:
+    categories:
+      - crossplane
+    kind: XUser
+    plural: xusers
+  # scope: Cluster
+  versions:
+    - name: v1alpha1
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: User is the Schema for the User API.
+          properties:
+            spec:
+              description: UserSpec defines the desired state of User.
+              properties:
+                compositeDeletePolicy:
+                  type: string
+                parameters:
+                  properties:
+                    email:
+                      type: string
+                    firstname:
+                      type: string
+                    group:
+                      type: string
+                    id:
+                      type: string
+                    initialPassword:
+                      items:
+                        properties:
+                          temporary:
+                            type: boolean
+                          valueSecretRef:
+                            properties:
+                              key:
+                                type: string
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
+                      type: array
+                    lastname:
+                      type: string
+                    username:
+                      type: string
+                  type: object
+              type: object
+            status:
+              description: UserStatus defines the observed state of User.
+              type: object
+          required:
+            - spec
+          type: object
+      served: true

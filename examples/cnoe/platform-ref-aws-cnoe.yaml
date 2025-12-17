@@ -1,5 +1,5 @@
 apiVersion: aws.platformref.upbound.io/v1alpha1
-kind: CNOE
+kind: XCNOE
 metadata:
   name: platform-ref-aws-cnoe
   namespace: default
@@ -7,13 +7,14 @@ spec:
   compositeDeletePolicy: Foreground
   parameters:
     id: platform-ref-aws-cnoe
-    region: us-west-2
-    version: "1.27"
+    region: eu-west-1
+    version: "1.34"
+    deletionPolicy: Delete
     # Important: Please read the README regarding the need for a route53zoneId.
     # The route53zoneId is crucial for making the CNOE platform accessible via a web browser.
     # Replace the placeholder below with your Route53 Zone ID.
     # route53zoneId: Z0000000000000000000
-    route53zoneId: ${data.aws_route53_zone_publicZoneId}
+    route53zoneId: <YOUR_AWS_ROUTE53_PUBLIC_ZONEID>
     iam:
       # Important: Please specify an iamRoleArn to access the AWS EKS Cluster deployed as part of CNOE.
       # Without specifying a valid roleArn, you will not be able to log in to the EKS cluster.
@@ -22,16 +23,15 @@ spec:
       #   arn:aws:iam::123456789:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
       # To this:
       #   arn:aws:iam::123456789:role/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
-      # roleArn: arn:aws:iam::123456789:role/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
-      roleArn: ${data.aws_eks_iam_default_admin}
+      # and in insert it below, like so:
+      # roleArn: arn:aws:iam::123456789:role/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7    
+      roleArn: <YOUR_IAM_ROLE_ARN>
     nodes:
-      count: 3
+      count: 8
       instanceType: t3.small
     gitops:
       git:
-        url: https://github.com/upbound/platform-ref-aws-cnoe.git
-        path: platform-ref-aws-cnoe/infrastructure.yaml
+        url: https://github.com/upbound/configuration-gitops-argocd.git
+        path: gitops
         ref:
           name: HEAD
-  writeConnectionSecretToRef:
-    name: platform-ref-aws-cnoe-kubeconfig

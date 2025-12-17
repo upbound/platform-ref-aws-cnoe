@@ -1,5 +1,5 @@
 apiVersion: keycloak.platformref.upbound.io/v1alpha1
-kind: User
+kind: XUser
 metadata:
   name: argocd-admin-user
   namespace: default
@@ -17,7 +17,7 @@ spec:
           key: password
           name: argocd-admin-user
           namespace: default
-        temporary: true
+        temporary: false
 ---
 apiVersion: v1
 kind: Secret

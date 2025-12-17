@@ -1,8 +1,0 @@
-key:
-  components:
-    - name: crossplane
-      chart: crossplane
-      version: "v1.14.5"
-      releaseName: crossplane
-      repoUrl: "https://charts.crossplane.io/stable"
-      namespace: crossplane-system

@@ -1,0 +1,16 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xcnoes.aws.platformref.upbound.io
+spec:
+  compositeTypeRef:
+    apiVersion: aws.platformref.upbound.io/v1alpha1
+    kind: XCNOE
+  mode: Pipeline
+  pipeline:
+  - functionRef:
+      name: upbound-platform-ref-aws-cnoecompose-cnoe-stack
+    step: compose-cnoe-stack
+  - functionRef:
+      name: crossplane-contrib-function-auto-ready
+    step: crossplane-contrib-function-auto-ready

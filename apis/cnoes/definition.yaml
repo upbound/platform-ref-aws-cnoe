@@ -1,0 +1,85 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xcnoes.aws.platformref.upbound.io
+spec:
+  group: aws.platformref.upbound.io
+  names:
+    categories:
+      - crossplane
+    kind: XCNOE
+    plural: xcnoes
+  versions:
+    - name: v1alpha1
+      referenceable: true
+      served: true
+      schema:
+        openAPIV3Schema:
+          description: XCNOE is the Schema for the XCNOE API.
+          properties:
+            spec:
+              description: XCNOESpec defines the desired state of XCNOE.
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              properties:
+                compositeDeletePolicy:
+                  type: string
+                compositionRef:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                compositionRevisionRef:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                compositionUpdatePolicy:
+                  type: string
+                parameters:
+                  properties:
+                    deletionPolicy:
+                      type: string
+                    gitops:
+                      properties:
+                        git:
+                          properties:
+                            path:
+                              type: string
+                            ref:
+                              properties:
+                                name:
+                                  type: string
+                              type: object
+                            url:
+                              type: string
+                          type: object
+                      type: object
+                    iam:
+                      properties:
+                        roleArn:
+                          type: string
+                      type: object
+                    id:
+                      type: string
+                    nodes:
+                      properties:
+                        count:
+                          type: number
+                        instanceType:
+                          type: string
+                      type: object
+                    region:
+                      type: string
+                    route53zoneId:
+                      type: string
+                    version:
+                      type: string
+                  type: object
+            status:
+              description: XCNOEStatus defines the observed state of XCNOE.
+              properties:
+                cnoe:
+                  description: Freeform field containing status information for cnoe platform.
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              type: object
+          required:
+            - spec
+          type: object

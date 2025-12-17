@@ -1,9 +1,4 @@
-/.cache
-/.work
-/_output
-/results
-/.idea
-
-*.xpkg
-kubeconfig
-examples/cnoe-c.yaml
+.venv
+_output
+.up
+.claude

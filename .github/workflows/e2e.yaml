@@ -27,7 +27,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           
       - name: Export project-specific environment variables
-        if: secrets.E2E_EXTRA != ''
+        if: ${{ secrets.E2E_EXTRA != '' }}
         env:
           E2E_EXTRA: ${{ secrets.E2E_EXTRA }}
         run: |
